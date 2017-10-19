@@ -1,8 +1,10 @@
 
 class TabItem {
-  constructor(element) {
+  constructor(element, parent) {
     // attach dom element to object. Example in Tabs class
     this.element = element;
+    this.link = parent;
+    this.tabs = parent.tabs;
   }
 
   select() {
@@ -20,8 +22,8 @@ class TabLink {
   constructor(element, parent) {
     this.element = element;// attach dom element to object
     this.tabs = parent;// attach parent to object
-    this.tabItem = parent.getTab(this.element.dataset.tab);// assign this to the associated tab using the parent's "getTab" method by passing it the correct data
-    this.tabItem = new TabItem(this.tabItem);// reassign this.tabItem to be a new instance of TabItem, passing it this.tabItem
+    this.tabItem = this.tabs.getTab(this.element.dataset.tab);// assign this to the associated tab using the parent's "getTab" method by passing it the correct data
+    this.tabItem = new TabItem(this.tabItem, this);// reassign this.tabItem to be a new instance of TabItem, passing it this.tabItem
     this.element.addEventListener('click', () => {
       this.tabs.updateActive(this);
       this.select();
@@ -30,14 +32,14 @@ class TabLink {
 
   select() {
     // select this link
-    this.element.classList.add("Tabs__item-selected");
+    this.element.classList.add("Tabs__link-selected");
     // select the associated tab
     this.tabItem.select();
   }
 
   deselect() {
     // deselect this link
-    this.element.classList.remove("Tabs__item-selected");
+    this.element.classList.remove("Tabs__link-selected");
     // deselect the associated tab
     this.tabItem.deselect();
   }
